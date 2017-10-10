@@ -145,6 +145,55 @@ var nextStep = function () {
     
 };
     
+var seeCards = function() {
+    //read the text from the log.txt file
+    fs.readFile('./log.txt', 'utf8', function(error, data) {
+        //if an error is found log the error
+        if (error) {
+            console.log('Error occoured: ' + error);
+        }
+                        
+        var questions = data.split(';');
+        var notEmpty = function(value) {
+            return value;
+        };
+        questions = questions.filter(notEmpty);
+        var total = 0;
+        seeQuestions(questions, total);
+        
+    });
+};
+    
+    
+    var seeQuestions = function(array, index){
+        question = array[index];
+        var parseQuestion = JSON.parse(question);
+        var questionText;
+        var correctAnswer;
+        if (parseQuestion.type === 'basic') {
+            questionText = parseQuestion.front;
+            correctAnswer = parseQuestion.back;
+        } else if (parseQuestion.type === 'cloze') {
+            questionText = parseQuestion.clozeDelete;
+            correctAnswer = parseQuestion.cloze;
+        }
+        inquirer.prompt([{
+            name: 'response',
+            message: questionText
+        }]).then(function(answer) {
+            if (answer.response === correctAnswer) {
+                console.log('Correct!');
+            } if (index < array.length -1) {
+                seeQuestions(array, index + 1);
+            }
+        } else {
+                 console.log('Incorrect!');
+        if (index < array.length - 1) {
+            seeQuestions(array, index + 1);
+        }
+                 }
+    });
+};
     
     
     
@@ -158,8 +207,3 @@ var nextStep = function () {
     
     
     
-    
-    
-    
-    
-}
