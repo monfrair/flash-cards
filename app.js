@@ -88,10 +88,10 @@ var addNewCard = function () {
                 }
         }, {
                 name: 'cloze',
-                message: 'What is the cloze part?',
+                message: 'What is the cloze portion?',
                 validate: function (input) {
                     if (input === '') {
-                        console.log('Please enter the cloze part');
+                        console.log('Please enter the cloze portion');
                         return false;
                     } else {
                         return true;
@@ -107,7 +107,7 @@ var addNewCard = function () {
                     newCloze.create();
                     nextStep();
                 } else {
-                    console.log('The cloze part you entered is not found in the text.  Please re-enter the data');
+                    console.log('The cloze portion you entered is not found in the text.  Please re-enter the data');
                     addNewCard();
                 }
             });
@@ -123,9 +123,9 @@ var nextStep = function () {
         message: 'What would you like to do next?',
         type: 'list',
         choices: [{
-            name: 'make-new-card'
+            name: 'make-new-flashcard'
         }, {
-            name: 'show-all-cards'
+            name: 'show-all-flashcards'
         }, {
             name: 'nothing'
         }]
@@ -134,77 +134,65 @@ var nextStep = function () {
         //what to do with received input
 
 
-    }]).then(function(answer) {
-        if (answer.nextAction === 'make-new-card') {
+    }]).then(function (answer) {
+        if (answer.nextAction === 'make-new-flashcard') {
             addNewCard();
-        } else if (answer.nextAction === 'show-all-cards') {
+        } else if (answer.nextAction === 'show-all-flashcards') {
             seeCards();
         } else if (answer.nextAction === 'nothing') {
             return;
         }
     });
-    
+
 };
-    
-var seeCards = function() {
+
+var seeCards = function () {
     //read the text from the log.txt file
-    fs.readFile('./log.txt', 'utf8', function(error, data) {
+    fs.readFile('./log.txt', 'utf8', function (error, data) {
         //if an error is found log the error
         if (error) {
             console.log('Error occoured: ' + error);
         }
-                        
+
         var questions = data.split(';');
-        var notEmpty = function(value) {
+        var notEmpty = function (value) {
             return value;
         };
         questions = questions.filter(notEmpty);
         var total = 0;
         seeQuestions(questions, total);
-        
+
     });
 };
-    
-    
-    var seeQuestions = function(array, index){
-        question = array[index];
-        var parseQuestion = JSON.parse(question);
-        var questionText;
-        var correctAnswer;
-        if (parseQuestion.type === 'basic') {
-            questionText = parseQuestion.front;
-            correctAnswer = parseQuestion.back;
-        } else if (parseQuestion.type === 'cloze') {
-            questionText = parseQuestion.clozeDelete;
-            correctAnswer = parseQuestion.cloze;
+
+
+var seeQuestions = function (array, index) {
+    question = array[index];
+    var parseQuestion = JSON.parse(question);
+    var questionText;
+    var correctAnswer;
+    if (parseQuestion.type === 'basic') {
+        questionText = parseQuestion.front;
+        correctAnswer = parseQuestion.back;
+    } else if (parseQuestion.type === 'cloze') {
+        questionText = parseQuestion.clozeDelete;
+        correctAnswer = parseQuestion.cloze;
+    }
+    inquirer.prompt([{
+        name: 'response',
+        message: questionText
+        }]).then(function (answer) {
+        if (answer.response === correctAnswer) {
+            console.log('Correct!');
         }
-        inquirer.prompt([{
-            name: 'response',
-            message: questionText
-        }]).then(function(answer) {
-            if (answer.response === correctAnswer) {
-                console.log('Correct!');
-            } if (index < array.length -1) {
-                seeQuestions(array, index + 1);
-         
-        } else {
-                 console.log('Incorrect!');
         if (index < array.length - 1) {
             seeQuestions(array, index + 1);
+
+        } else {
+            console.log('Incorrect!');
+            if (index < array.length - 1) {
+                seeQuestions(array, index + 1);
+            }
         }
-                 }
     });
 };
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
