@@ -21,9 +21,9 @@ inquirer.prompt([{
     }, {
         name: ' '
     }]
-    
+
     //function to direct game based on user entry
-}]).then(function(answer) {
+}]).then(function (answer) {
     if (answer.choice === 'add-a-new-flashcard') {
         addNewCard();
     } else if (answer.choice === 'see-all-of-the-flashcards') {
@@ -31,19 +31,97 @@ inquirer.prompt([{
     }
 });
 
-var addNewCard = function() {
-    // get the input from the user
-    inquirer.prompt([{
-        name: 'typeCard',
-        message: 'What type of flash card do you want to create?',
-        type: 'list',
-        choices: [{
-            name: 'make-a-regular-flashcard'
+var addNewCard = function () {
+// get the input from the user
+inquirer.prompt([{
+name: 'typeCard',
+message: 'What type of flash card do you want to create?',
+type: 'list',
+choices: [{
+    name: 'make-a-regular-flashcard'
         }, {
-            name: 'make-a-cloze-flashcard'
+    name: 'make-a-cloze-flashcard'
         }]
+
+// use the received input to direct the app
+    }]).then(function (answer) {
+    if (answer.typeCard === 'make-a-regular-flashcard') {
+        inquirer.prompt([{
+                name: 'front',
+                message: 'What is the question?',
+                validate: function (input) {
+                    if (input === ' ') {
+                        console.log('Please ask a question');
+                        return false;
+                    } else {
+                        return true;
+                    }
+                }
+
+    }, {
+                name: 'back',
+                message: 'What is the correct answer?',
+                validate: function (input) {
+                    if (input === '') {
+                        console.log('Please enter an answer');
+                        return false;
+                    } else {
+                        return true;
+                    }
+                }
+   }]).then(function(answer) {
+            var newRegular = new RegularFlashcard(answer.front, answer.back);
+            newRegular.create();
+            nextStep();
+        });
+    } else if (answer.typeCard === 'make-a-cloze-flashcard') {
+        inquirer.prompt([{
+            name: 'text',
+            message: 'Enter the full text',
+            validate: function(input) {
+                if (input === '') {
+                    console.log('Please enter the full text');
+                } else {
+                    return true;
+                }
+            }
+        }, {
+            name: 'cloze',
+            message: 'What is the cloze part?',
+            validate: function(input) {
+                if (input === '') {
+                    console.log('Please enter the cloze part');
+                    return false;
+                } else {
+                    return true;
+                }
+            }
+        }
+            
+        }])
+    }
+
+
         
         
         
-    }])
+        
+        
+        
+        
+
+
+       
+}
+})
+
+
+
+
+
+
+
+
+
+}])
 }
