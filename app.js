@@ -188,7 +188,7 @@ var seeQuestions = function (array, index) {
         if (index < array.length - 1) {
             seeQuestions(array, index + 1);
 
-        } else {
+        } else if (answer.response !== correctAnswer) {
             console.log('Incorrect!');
             if (index < array.length - 1) {
                 seeQuestions(array, index + 1);
