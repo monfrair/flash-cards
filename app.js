@@ -3,7 +3,8 @@
 // require inquirer for getting user input at command line
 // require fs
 
-var RegularFlashcard = require('./reg-flashcard.js');
+var RegularFlashcard = require('./BasicCard.js');
+//BasicCard.js
 var ClozeFlashcard = require('./cloze-flashcard.js');
 var inquirer = require('inquirer');
 var fs = require('fs');
@@ -185,7 +186,7 @@ var seeCards = function() {
                 console.log('Correct!');
             } if (index < array.length -1) {
                 seeQuestions(array, index + 1);
-            }
+         
         } else {
                  console.log('Incorrect!');
         if (index < array.length - 1) {
