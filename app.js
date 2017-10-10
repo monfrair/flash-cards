@@ -12,19 +12,21 @@ var fs = require('fs');
 // set up the inquirer prompt
 inquirer.prompt([{
     name: 'choice',
-    message: 'What do you want to do?',
+    message: 'What would you like to do?',
     type: 'list',
     choices: [{
-        name: 'add-flashcard'
+        name: 'add-a-new-flashcard'
     }, {
-        name: 'see-all-cards'
+        name: 'see-all-of-the-flashcards'
+    }, {
+        name: ' '
     }]
     
     //function to direct game based on user entry
 }]).then(function(answer) {
-    if (answer.choice === 'add-flashcard') {
+    if (answer.choice === 'add-a-new-flashcard') {
         addNewCard();
-    } else if (answer.choice === 'see-all-cards') {
+    } else if (answer.choice === 'see-all-of-the-flashcards') {
         seeCards();
     }
 });
@@ -33,12 +35,12 @@ var addNewCard = function() {
     // get the input from the user
     inquirer.prompt([{
         name: 'typeCard',
-        message: 'What type of flash card do you want to make?',
+        message: 'What type of flash card do you want to create?',
         type: 'list',
         choices: [{
-            name: 'regular-flashcard'
+            name: 'make-a-regular-flashcard'
         }, {
-            name: 'cloze-flashcard'
+            name: 'make-a-cloze-flashcard'
         }]
         
         
